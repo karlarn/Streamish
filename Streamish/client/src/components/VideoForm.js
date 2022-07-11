@@ -1,53 +1,61 @@
-import React from "react"
+import React , { useState } from 'react';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { addVideo } from "../modules/videoManager";
+import { useNavigate } from 'react-router-dom';
 
-const VideoForm =()=>
-{
-    // const handleControlledInputChange = (event) => {
-    //     const newVideo = { ...video }
-    //     let selectedVal = event.target.value
-    //     newVideo[event.target.id] = selectedVal
-    //     setVideo(newVideo)
-    // }
+const VideoForm = ({ getVideos }) => {
 
-    // const handleClickSaveVideo = (event) => {
-    //     event.preventDefault()
-    //     addAnimal(animal)
-    //         .then(() => {
-    //             alert(`You added ${animal.name} to your enCounter list and gained ${animal.xp} XP!`)
-    //         })
-    //         .then(() => { navigate("/home") })
-    // }   
-    return (
-    <>
+    const navigate = useNavigate();
+    
+  const emptyVideo = {
+    title: '',
+    description: '',
+    url: ''
+  };
 
-        <h1 >Add a video:</h1>
-        <form >
-            <div >
-                <fieldset>
-                    <div >
-                        <label htmlFor="title">title</label><br />
-                        <input type="text" id="title"  required placeholder="Video title"  />
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div >
-                        <label htmlFor="description">description</label><br />
-                        <input type="text" id="description" required placeholder="Description"  />
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div >
-                        <label htmlFor="url">description</label><br />
-                        <input type="text" id="url"  required placeholder="Url"  />
-                    </div>
-                </fieldset>
-                <button type="button" className="btn btn-primary"
-                    >
-                    Add Video
-                </button>
-            </div>
-        </form>
-    </>
-)
-}
+  const [video, setVideo] = useState(emptyVideo);
+
+  const handleInputChange = (evt) => {
+    const value = evt.target.value;
+    const key = evt.target.id;
+
+    const videoCopy = { ...video };
+
+    videoCopy[key] = value;
+    setVideo(videoCopy);
+  };
+
+  const handleSave = (evt) => {
+    evt.preventDefault();
+
+    addVideo(video).then(() => {
+        navigate("/");
+    });
+  };
+
+  return (
+    <Form>
+      <FormGroup>
+        <Label for="title">Title</Label>
+        <Input type="text" name="title" id="title" placeholder="video title"
+          value={video.title}
+          onChange={handleInputChange} />
+      </FormGroup>
+      <FormGroup>
+        <Label for="url">URL</Label>
+        <Input type="text" name="url" id="url" placeholder="video link" 
+          value={video.url}
+          onChange={handleInputChange} />
+      </FormGroup>
+      <FormGroup>
+        <Label for="description">Description</Label>
+        <Input type="textarea" name="description" id="description"
+          value={video.description}
+          onChange={handleInputChange} />
+      </FormGroup>
+      <Button className="btn btn-primary" onClick={handleSave}>Submit</Button>
+    </Form>
+  );
+};
+
 export default VideoForm;

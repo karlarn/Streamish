@@ -19,3 +19,7 @@ export const getSearchedForVideo = (searchInput) => {
     return fetch(baseUrl + "/search?q=" + searchInput + "&sortDesc=true")
     .then((res) => res.json())
 }
+
+export const getVideo = (id) => {
+  return fetch(`${baseUrl}/GetVideoByIdWithComments/${id}`).then((res) => res.json());
+};

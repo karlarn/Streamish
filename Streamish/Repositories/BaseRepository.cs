@@ -16,7 +16,6 @@ namespace Streamish.Repositories
         {
             get
             {
-                
                 return new SqlConnection(_connectionString);
             }
         }
